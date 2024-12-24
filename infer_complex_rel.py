@@ -12,11 +12,7 @@ class Infer_Complex_Relationships():
         self.all_path_file = all_path_file
 
     def extract_complex_rels_features(self):
-        '''
-        提取复杂商业关系推断使用的特征
-        2024/05/24：其实也就多一个distance to clique
-        :return:
-        '''
+ 
         for file_name in os.listdir(self.feature_data_folder):
             if 'degree.json' in file_name:
                 degree_file_path = os.path.join(self.feature_data_folder,file_name)
@@ -58,10 +54,7 @@ class Infer_Complex_Relationships():
         print('All finish!')
 
     def create_complex_rel_feature_csv(self):
-        '''
-           node degree|transit degree|distance to clique|AS type|AS hierarchy|AS geolocation|AS pagerank|AS_high_hierarchy_num
-
-           '''
+ 
         node_list = []
         with open(sorted_node_file, 'r+') as f:
             for line in f:
@@ -141,14 +134,11 @@ class Infer_Complex_Relationships():
                     csv_writer.writerow(exp_data)
 
     def infer_complex_rels(self):
-        '''
-        拼接特征向量并加载决策树模型预测
-        :return:
-        '''
+     
         complex_rel_model = ''
-        with open('./random_forest_model.pkl', 'rb') as file:
+        with open('', 'rb') as file:
             loaded_model = pickle.load(file)
-        dataset = pd.read_csv('../train_data/tree_data9.csv', header=None,
+        dataset = pd.read_csv('', header=None,
                               names=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
                                      'q'])
         print(np.isnan(dataset).any())
