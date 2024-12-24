@@ -33,11 +33,11 @@ class EdgeClassifier(nn.Module):
         self.sig = nn.Sigmoid()
 
     def forward(self, src_nodes, dst_nodes, node_embed):
-        # 获取节点和边的索引，然后通过索引获取相应的节点特征和边特征
+
         src_node_embed = node_embed[src_nodes]
         dst_node_embed = node_embed[dst_nodes]
 
-        # 拼接两个节点的embedding和新的边特征作为边的表示
+
         combined_embed = torch.cat([src_node_embed, dst_node_embed], dim=-1)
         x = torch.relu(self.fc1(combined_embed))
         logits = self.fc2(x)
@@ -46,24 +46,21 @@ class EdgeClassifier(nn.Module):
 class Infer_Hidden_Links():
 
     def __init__(self,source_data_folder,progress_data_folder,feature_data_folder,result_data_folder):
-        # input
+  
         self.source_data_folder = source_data_folder
         self.progress_data_folder = progress_data_folder
         self.feature_data_folder = feature_data_folder
         self.result_data_folder = result_data_folder
 
-        # output
+
         self.changed_all_links_file = os.path.join(self.progress_data_folder,'changed_links_file.txt')
         self.sorted_node_file = os.path.join(self.progress_data_folder,'sorted_node_file.txt')
 
     def AS2num(self):
-        '''
-        将AS映射为顺序数字
-        :return:
-        '''
+
         print("开始寻找BGP原始文件...")
         for file_name in os.listdir(self.source_data_folder):
-            if 'all-paths.txt' in file_name: # 寻找BGP原始文件
+            if 'all-paths.txt' in file_name: 
                 all_links_file = os.path.join(self.source_data_folder,file_name)
         print(f"成功！原始文件名：{all_links_file}")
         ASes = set()
@@ -85,7 +82,6 @@ class Infer_Hidden_Links():
             for i in range(len(ASes)):
                 print(ASes[i], i)
                 node_index[ASes[i]] = i
-                # 映射文件  格式为 <原ASN>|<映射后序号>
                 w.write(str(ASes[i]) + '|'+str(i)+'\n')
         with open(self.changed_all_links_file, 'w+') as w:
             with open(all_links_file, 'r+') as f:
@@ -101,13 +97,8 @@ class Infer_Hidden_Links():
                     w.write(new_link + '\n')
         print("映射成功！")
 
-    def create_new_links(self):  # 大约2小时完成
-        '''
-        将所有节点排列组合，得到可见链接之外的所有边
-
-        create_new_links.exe -fileA <文件A路径> -fileB <文件B路径>
-        :return:
-        '''
+    def create_new_links(self): 
+      
         t1 = time.time()
         input_file_path = self.changed_all_links_file
         output_file_path = os.path.join(self.progress_data_folder,'new_links.txt')
@@ -119,12 +110,7 @@ class Infer_Hidden_Links():
             f.write("共耗时："+str(t3))
 
     def create_features(self):
-        '''
-        构建所有AS节点的特征向量
-
-        :return: 按ASN从小到大顺序排好的节点特征csv
-        '''
-        # input
+ 
         degree_file_path = os.path.join(self.feature_data_folder, 'degree.json')
         transit_file_path = os.path.join(self.feature_data_folder, 'transit_degree.json')
         AS_hierarchy_file_path = os.path.join(self.feature_data_folder, 'AS_hierarchy.json')
@@ -135,7 +121,7 @@ class Infer_Hidden_Links():
         high_hierarchy_num_file_path = os.path.join(self.feature_data_folder, 'high_hierarchy_neighbour.json')
         AS_hegemony_file_path = os.path.join(self.feature_data_folder, 'AS_hegemony.json')
 
-        # output
+
         output_file_path = os.path.join(self.feature_data_folder,'node_features.csv')
 
         print('开始构建特征集...')
@@ -210,10 +196,7 @@ class Infer_Hidden_Links():
         print('构建完成！')
 
     def infer_hidden_links(self):
-        '''
-        加载Hidden-SAGE模型，对所有可见链接之外的边进行预测
-        :return:
-        '''
+
 
         t1 = time.time()
 
@@ -222,20 +205,20 @@ class Infer_Hidden_Links():
             if file_name.endswith('csv'):  #
                 node_features = os.path.join(self.feature_data_folder, file_name)
 
-        # 读取节点特征的 CSV 文件
+
         with open(node_features, 'r') as csvfile:
             reader = csv.reader(csvfile)
-            # 读取节点特征数据
+
             node_features_data = [list(map(float, row)) for row in reader]
         print('特征读取完毕！')
         print('开始构建图神经网络条件...')
-        # 构建图神经网络数据条件
+
         for file_name in os.listdir(self.progress_data_folder):
             if 'changed_links' in file_name:
                 exist_link_file = os.path.join(self.progress_data_folder, file_name)
         src_nodes = []
         dst_nodes = []
-        # 加载已存在的链接用于图神经网络
+
         with open(exist_link_file,'r+') as f:
             for line in f:
                 line = line.replace('\n','')
@@ -244,29 +227,29 @@ class Infer_Hidden_Links():
                 src_nodes.append(int(src_node))
                 dst_nodes.append(int(dst_node))
 
-        # num_nodes = len(node_features_data)
+
         num_features = 9  # 节点特征维度  2023年有AS霸权
 
         # 创建图
         g = dgl.DGLGraph()
         # g.add_nodes(num_nodes)
         g.add_edges(src_nodes, dst_nodes)
-        # 将节点特征添加到图 g
+
         g.ndata['feat'] = torch.tensor(node_features_data)
-        # 得到图神经网络产出的embedding
+
         graph_sage_model = GraphSAGE(num_features, 32, 16)
         node_embedding = graph_sage_model(g, g.ndata['feat'])
         node_embedding = node_embedding.detach()
         print('图神经网络构建完毕！已经得到图神经网络产出embedding！')
 
 
-        # 加载预测数据
+
         for file_name in os.listdir(self.progress_data_folder):
             if 'new_links' in file_name:  # 要预测的链接
                 new_link_file = os.path.join(self.progress_data_folder, file_name)
 
         print('正在加载模型...')
-        # 从PKL文件中加载模型
+
         with open('Hidden_link_classifier_model.pth', 'rb') as f:
             Hidden_link_classifier_model = torch.load(f)
         print('模型加载完毕！')
@@ -315,10 +298,7 @@ class Infer_Hidden_Links():
         #             f.write(str(infer_src_nodes[i]) + '|' + str(infer_dst_nodes[i])+ '\n')
 
     def num2AS(self):
-        '''
-        将预测后的边映射回AS号，打上标签
-        :return:
-        '''
+
         node_2_ASN = defaultdict(str)
         sorted_node_file = ''
         input_file_name = ''
@@ -344,10 +324,7 @@ class Infer_Hidden_Links():
                     w.write(link_record)
 
     def add_links(self):
-        '''
-        将推断出的隐藏链路加入到新链接中并标记
-        :return:
-        '''
+
         pass
 
     def main(self):
@@ -358,10 +335,10 @@ class Infer_Hidden_Links():
         pass
 
 if __name__ == '__main__':
-    source_data_folder = r"D:\projects\python\graduation_design\data\2022\source_data"
-    progress_data_folder = r"D:\projects\python\graduation_design\data\2022\progress_data"
-    feature_data_folder = r"D:\projects\python\graduation_design\data\2022\features"
-    result_data_folder = r"D:\projects\python\graduation_design\data\2022\results"
+    source_data_folder = r""
+    progress_data_folder = r""
+    feature_data_folder = r""
+    result_data_folder = r""
     ihl = Infer_Hidden_Links(source_data_folder,progress_data_folder,feature_data_folder,result_data_folder)
     # ihl.AS2num()
     # ihl.create_new_links()
