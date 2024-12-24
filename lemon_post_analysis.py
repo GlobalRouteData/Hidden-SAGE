@@ -20,9 +20,9 @@ import time
 
     
 def leak_events_statistics():
-    file_path = './HistoricalDataAnalysis/route_leaks/*'
+    file_path = ''
     files = os.path.join(
-        file_path, "leak_events.*.csv")
+        file_path, "")
     files = glob.glob(files)
     
     leakers = {}
@@ -69,9 +69,9 @@ def leak_events_statistics():
 
     frequentdict = {}
     ofile1 = open(
-        './HistoricalDataAnalysis/route_leaks/leak_events_flapping.csv', 'w')
+        '', 'w')
     ofile2 = open(
-        './HistoricalDataAnalysis/route_leaks/leak_events.csv', 'w')
+        '', 'w')
     for k, v in leakdict.items():
 
         if len(v['date']) > 1:
@@ -101,8 +101,8 @@ def leak_events_statistics():
   
 def quarantined_valleys_analysis():
 
-    ty = 'quarantined_routes'
-    file_path = './HistoricalDataAnalysis/route_leaks/*'
+    ty = ''
+    file_path = ''
     files = os.path.join(
         file_path, ty+"_extraction.*.csv")
     files = glob.glob(files)
@@ -140,9 +140,9 @@ def quarantined_valleys_analysis():
     tleak = defaultdict(set)
     valleysatday = defaultdict(set)
     dates = []
-    #ofile = open('./HistoricalDataAnalysis/route_leaks/quarantined_valleys.res', 'w')
+    
     ofile = open(
-        './HistoricalDataAnalysis/route_leaks/remaining_valleys.res', 'w')
+        '', 'w')
     for f in files:
         suffix = f.split('/')[-1].split('.')[-2]
         date = suffix[0:4] + '-'+suffix[4:6]+'-'+suffix[6:8]
@@ -153,7 +153,7 @@ def quarantined_valleys_analysis():
             for i, line in enumerate(filecontents):
                 fields = line.split(',')
 
-                # 1680392310,2a0b:a907::/32,38880+7474+7473+1299+3356+33891+39392+51744+206468,PP,PP,33891
+
                 timestamp, prefix, as_path, pair1, pair2, leaker = int(
                     fields[0]), fields[1], fields[2], fields[3], fields[4], fields[-1].strip('\n')
 
@@ -249,7 +249,7 @@ def quarantined_valleys_analysis():
   
 def quarantined_asvalley_extraction():
 
-    file_path = './HistoricalDataAnalysis/route_leaks/*/'
+    file_path = ''
     files = os.path.join(
         file_path, "*.out")
     files = glob.glob(files)
@@ -514,7 +514,7 @@ def LeMon_post_analysis():
 
 
 def LeMon_post_analysis_v2():
-    #d = 'route_leaks/measure_202302/'
+
     d = ''
     ty = 'route_leak'
     file_path = './HistoricalDataAnalysis/'+d
