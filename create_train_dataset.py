@@ -9,19 +9,19 @@ class Create_Train_Dataset():
 
 
         # triple
-        self.triple_sorted_node_file = '../train_data/triple_link_samples/triple_sorted_node.txt'
-        self.triple_message_links = '../train_data/triple_link_samples/triple_graph.txt'
-        self.triple_changed_message_links = '../train_data/triple_link_samples/triple_changed_message_links.txt'
-        self.triple_train_sample_file = '../train_data/triple_link_samples/triple_out_samples.txt'
-        self.triple_changed_sample_links = '../train_data/triple_link_samples/triple_changed_sample_links.txt'
-        self.triple_node_feature = '../train_data/triple_link_samples/triple_node_features.csv'
+        self.triple_sorted_node_file = ''
+        self.triple_message_links = ''
+        self.triple_changed_message_links = ''
+        self.triple_train_sample_file = ''
+        self.triple_changed_sample_links = ''
+        self.triple_node_feature = ''
         # common
-        self.common_sorted_node_file = '../train_data/common_link_samples/common_sorted_node.txt'
-        self.common_message_links = '../train_data/common_link_samples/common_graph.txt'
-        self.common_changed_message_links = '../train_data/common_link_samples/common_changed_message_links.txt'
-        self.common_train_sample_file = '../train_data/common_link_samples/common_out_samples.txt'
-        self.common_changed_sample_links = '../train_data/common_link_samples/common_changed_sample_links.txt'
-        self.common_node_feature = '../train_data/common_link_samples/common_node_features.csv'
+        self.common_sorted_node_file = ''
+        self.common_message_links = ''
+        self.common_changed_message_links = ''
+        self.common_train_sample_file = ''
+        self.common_changed_sample_links = ''
+        self.common_node_feature = ''
 
 
     def AS_to_node_graph(self,message_link_file,sorted_node_file,changed_message_links_file):
@@ -78,10 +78,7 @@ class Create_Train_Dataset():
                     w.write(new_link+'\n')
 
     def create_node_feature(self,sorted_node_file,feature_file):
-        '''
-        node degree|transit degree|AS hierarchy|AS pagerank|AS hegemony|AS Type|AS customer cone|AS geoplocation|AS high hierarchy num
-
-        '''
+      
         node_list = []
         with open(sorted_node_file, 'r+') as f:
             for line in f:
