@@ -8,22 +8,13 @@ from calculate_hidden_features import Hidden_Features
 
 class Source_Processor():
     def __init__(self):
-        self.year = '2022'
-        self.source_data_folder = fr"D:\projects\python\graduation_design\data\{self.year}\source_data"
-        self.feature_data_folder = fr'D:\projects\python\graduation_design\data\{self.year}\features'
-        self.result_data_folder = fr'D:\projects\python\graduation_design\data\{self.year}\results'
+        self.year = ''
+        self.source_data_folder = fr""
+        self.feature_data_folder = fr''
+        self.result_data_folder = fr''
 
     def unzip_source_data(self,folder_path):
-        '''
-        在爬取原始数据后将原始数据解压到指定文件夹
-        原始数据：
-        all-paths
-        as2types
-        as-org2info
-        ppdc-ases
-
-        :return:
-        '''
+       
 
         # 检测操作系统
         system_type = platform.system()
@@ -77,18 +68,13 @@ class Source_Processor():
             print("不支持的操作系统类型")
 
     def crawl_source_data(self): #####  主要功能函数
-        '''
-        爬取近10年的all-path数据、客户锥数据、AS类型数据、AS地理位置
-
-        2024/05/08: 由于AS type数据公开太少，直接使用2021年的数据
-        :return:
-        '''
-        all_path_url =f'https://publicdata.caida.org/datasets/2013-asrank-data-supplement/data/{self.year}1201.all-paths.bz2'
-        customer_cone_url = f'https://publicdata.caida.org/datasets/2013-asrank-data-supplement/data/{self.year}1201.ppdc-ases.txt.bz2'
-        AS_geolocation_url = f'https://publicdata.caida.org/datasets/as-organizations/{self.year}1001.as-org2info.txt.gz'
-        AS_hegemony_url = f'https://ihr-archive.iijlab.net/ihr/hegemony/ipv4/global/{self.year}/12/31/ihr_hegemony_ipv4_global_{self.year}-12-31.csv.lz4'
-        AS_rel_url = f'https://publicdata.caida.org/datasets/2013-asrank-data-supplement/data/{self.year}1201.as-rel.txt.bz2'
-        AS_type_url = 'https://publicdata.caida.org/datasets/as-classification_restricted/20210401.as2types.txt.gz'
+      
+        all_path_url =f''
+        customer_cone_url = f''
+        AS_geolocation_url = f''
+        AS_hegemony_url = f''
+        AS_rel_url = f''
+        AS_type_url = ''
 
 
         df1 = DownloadFile(customer_cone_url,10,self.source_data_folder)
@@ -126,10 +112,7 @@ class Source_Processor():
                 print('提取结束！')
 
     def extract_hidden_link_features(self):
-        '''
-        提取与隐藏链路推断有关的特征
-        :return:
-        '''
+ 
         all_links_file_name = ''
         all_triple_links_file_name = ''
         ppdc_file_name = ''
