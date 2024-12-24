@@ -6,26 +6,13 @@ import httpx
 from tqdm import tqdm
 import argparse
 
-
-'''
-这个脚本的功能是下载特定收集器的指定月份的BGP信息
-具体使用方法是在终端中利用命令行输入必要参数，然后就可以开始下载
-'''
 parser = argparse.ArgumentParser()
 parser.add_argument('-m','--more',type=str,default=None, metavar='', help='set a begin point of download set.')
 args = parser.parse_args()
 
 
 def logger_config(log_path, logging_name):
-    '''
-    配置log
-    :param log_path: 输出log路径
-    :param logging_name: 记录中name，可随意
-    :return:
-    '''
-    '''
-    logger是日志对象，handler是流处理器，console是控制台输出（没有console也可以，将不会在控制台输出，会在日志文件中输出）
-    '''
+  
     # 获取logger对象,取名
     logger = logging.getLogger(logging_name)
     # 输出ERROR及以上级别的信息，针对所有输出的第一层过滤
@@ -44,13 +31,6 @@ thread_logger = logger_config(log_path='thread_log.txt', logging_name="thread_er
 download_logger = logger_config(log_path='download_log.txt', logging_name="download_infos")
 
 
-# 下载类
-'''
-使用方法：
-classname  = DownloadFile(url, thread_num)
-classname.main()
-拿去下点儿别的什么也可以
-'''
 class DownloadFile(object):
     def __init__(self, download_url, thread_num,data_folder):
         """
@@ -210,9 +190,3 @@ class DownloadFile(object):
 
 
 
-'''
--m 参数格式不知道怎么写的时候看下载日志  日志里的字符串长啥样就把他们用‘/‘连起来，例如
-route-views.widebgpdata2022.10RIBSrib.20221025.2200.bz2下载完成
--m 里就写 -m route-views.wide/bgpdata/2022.10/RIBS/rib.20221025.2200.bz2
-
-'''
