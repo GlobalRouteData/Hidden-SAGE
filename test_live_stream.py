@@ -528,12 +528,12 @@ def main():
 if __name__ == "__main__":
     # main()
     # historical_data_analysis()
-    basic_path = './LocalData'
-    start_date = '2023-04-01 00:00:00'
+    basic_path = ''
+    start_date = ''
     caida_as_rel_pp = {}
-    with open(basic_path+'/CAIDA/caida_as_rel_pp.p', "rb") as f:
+    with open(basic_path+'', "rb") as f:
         caida_as_rel_pp = pickle.load(f)
     caida_as_rel_pc = {}
-    with open(basic_path+'/CAIDA/caida_as_rel_pc.p', "rb") as f:
+    with open(basic_path+'', "rb") as f:
         caida_as_rel_pc = pickle.load(f)
     test_route_leaks(start_date, caida_as_rel_pp, caida_as_rel_pc)
