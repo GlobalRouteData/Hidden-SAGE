@@ -6,21 +6,10 @@ from collections import defaultdict
 import csv
 
 class Hidden_Features():
-    '''
-    用于计算AS节点特征的类
-    AS节点特征包括：
-    节点度
-    过境度
-    AS层级
-    AS pagerank
-    AS类型
-    AS客户锥
-    AS地理位置
-    邻居高层AS数量
-    '''
+
 
     def __init__(self,feature_folder,all_links,all_triplets,ppdc,AS_rel,hege_csv,AS_type,org2info):
-        # input 原始数据
+
         self.all_links = all_links
         self.all_triple_links = all_triplets
         self.ppdc = ppdc
@@ -28,7 +17,7 @@ class Hidden_Features():
         self.unzipped_csv = hege_csv
         self.AS_type = AS_type
         self.org2info = org2info
-        # output 输出特征文件的路径
+
         self.output_pagerank_path = os.path.join(feature_folder,'AS_pagerank.json')
         self.output_degree_path = os.path.join(feature_folder,'degree.json')
         self.output_transit_degree_path = os.path.join(feature_folder,'transit_degree.json')
@@ -195,16 +184,7 @@ class Hidden_Features():
 
     def create_high_tier_neighbour(self):
 
-        # 假设你已经构建了一个图，命名为 G
-        # G = nx.Graph()  # 这里需要根据你的实际情况创建图
-
-        # 假设你有一个特定的链接
-        # specific_link = ('123', '234')  # 这里需要根据你的实际情况提供特定的链接
-        #
-        # # 获取特定链接的邻居节点列表
-        # neighbors = list(G.neighbors(specific_link))
-        #
-        # print("Neighbors of {}: {}".format(specific_link, neighbors))
+   
         print('Calculating high hierarchy neighbours...')
         node_set = set()
         edge_set = []
