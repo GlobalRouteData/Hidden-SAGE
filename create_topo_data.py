@@ -4,14 +4,14 @@ samples_line = []
 triplinks = []
 
 detour_list = []
-with open('../2014/train_data/triple_link_samples/triple_samples.txt','r+') as sample_file:
+with open('','r+') as sample_file:
     for line in sample_file:
         line = line.replace('\n','')
         print(line)
         AS1 = line.split('|')[0]
         AS2 = line.split('|')[1]
         samples_line.append(AS1+"|"+AS2)
-with open('../2014/process_data/2014-all-triplelinks.txt', 'r+') as triplink_file:
+with open('', 'r+') as triplink_file:
     for triplink in triplink_file:
         triplink = triplink.replace('\n','')
         triplinks.append(triplink)
@@ -28,7 +28,7 @@ for i in samples_line:
             detour_list.append(format_data)
             break
 
-with open('triplet_miss.txt','w+') as w:
+with open('','w+') as w:
     for i in detour_list:
         w.write(i+'\n')
 
